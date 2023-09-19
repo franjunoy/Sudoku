@@ -1,0 +1,675 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define NUM 10
+//VARIABLES
+int opc, dif, contayuda, fila, colum;
+char ayuda;
+//TABLEROS
+int easy[10][81]={
+                {7,3,0,0,0,0,0,2,0,5,0,0,9,0,0,8,0,4,0,0,2,3,4,0,5,0,0,0,0,0,0,7,0,0,8,9,9,0,6,2,5,0,0,0,0,4,0,0,0,0,0,2,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,3,1,0,0,5,0,4,3,0,0,0,0,1,0},
+                {0,0,0,0,9,0,6,5,0,0,0,0,0,0,0,0,0,7,0,0,0,5,0,7,0,4,0,0,5,2,0,1,0,0,0,0,0,0,0,0,2,9,0,0,0,0,3,0,4,0,0,0,0,9,0,1,6,0,5,0,2,3,0,8,0,0,0,0,4,7,0,0,0,0,0,0,7,3,0,9,0},
+                {0,1,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,2,0,0,3,9,0,0,0,6,5,0,0,8,0,0,0,4,9,0,9,0,0,1,0,3,6,0,0,0,0,0,0,0,7,0,1,0,3,0,2,0,5,0,7,0,7,0,5,0,6,0,0,0,0,0,0,6,7,0,0,0,9,0},
+                {6,0,4,0,0,0,9,2,8,3,9,0,0,0,0,0,1,6,0,0,0,0,0,0,0,0,0,0,5,0,2,0,7,0,0,0,9,0,1,8,4,0,0,0,0,0,7,0,9,0,3,0,0,0,0,0,0,5,0,0,0,0,1,8,0,0,0,0,0,0,6,3,0,0,0,7,0,8,0,0,0},
+                {1,0,0,0,5,0,7,0,0,0,5,0,2,0,0,3,8,9,0,0,4,0,3,8,0,0,0,0,0,8,0,0,9,0,7,0,2,0,0,0,0,0,4,9,0,0,0,5,0,0,0,0,0,0,3,7,6,0,0,0,0,0,5,0,0,0,0,0,0,8,0,1,0,0,0,0,0,3,2,6,0},
+                {3,6,0,0,0,0,0,9,0,0,8,9,5,0,0,0,2,0,0,0,5,0,9,2,0,0,0,0,0,0,0,8,5,0,0,0,0,0,7,0,4,1,3,0,0,0,1,6,2,0,0,7,0,0,0,7,0,0,0,0,0,0,2,0,0,0,0,5,0,0,6,0,0,0,0,4,0,0,0,8,0},
+                {0,0,0,2,0,0,5,6,7,0,0,0,5,0,8,0,0,1,3,0,0,0,0,0,8,0,4,8,0,0,0,0,1,0,0,0,1,0,2,0,0,0,3,7,8,0,6,0,0,0,0,0,0,0,2,0,7,0,5,0,0,1,0,0,0,0,0,0,3,2,0,0,0,3,0,4,0,9,0,0,0},
+                {6,0,0,5,0,0,7,0,0,0,9,0,2,4,0,0,3,0,4,0,0,0,0,0,0,0,0,0,0,0,0,3,8,0,4,7,0,0,0,4,0,0,8,0,0,0,0,9,7,0,5,0,0,6,0,6,0,0,2,0,0,8,3,1,0,0,0,0,0,0,0,9,0,0,0,0,8,0,6,0,0},
+                {0,0,0,1,0,0,0,8,0,5,0,6,3,0,0,0,0,1,0,0,0,0,0,9,0,3,5,0,0,7,0,0,3,0,0,0,0,0,1,7,0,0,0,6,0,9,6,0,0,0,8,0,0,0,0,0,4,0,3,0,0,9,7,0,3,0,2,0,0,8,5,0,0,0,8,0,5,6,0,0,4},
+                {0,2,0,0,0,9,6,0,0,0,9,3,0,0,0,4,0,0,0,7,0,0,3,0,5,8,0,7,0,0,3,0,0,8,0,0,0,1,0,0,0,6,0,9,2,0,0,6,0,0,5,0,0,3,0,0,2,0,4,1,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,3,0,0},
+        };
+ int medium[10][81]={
+                    {0,0,2,9,0,5,0,0,0,0,0,0,0,0,6,0,0,3,7,0,1,0,0,8,4,0,0,0,0,0,7,0,0,0,0,4,0,9,6,3,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,8,0,3,9,0,3,5,0,0,0,0,0,0,0},
+                    {4,0,0,6,0,9,0,0,0,0,0,0,0,5,0,0,9,0,8,0,2,0,0,4,0,0,0,0,3,0,4,8,0,0,0,5,0,8,0,7,0,0,0,0,0,1,0,0,0,0,0,4,0,7,9,0,0,0,0,0,2,0,0,0,6,0,5,0,0,0,0,9,0,0,5,0,0,8,0,0,0},
+                    {0,0,5,2,8,0,0,1,0,6,0,0,0,0,0,0,0,5,9,0,0,0,0,0,7,0,0,2,0,0,0,0,6,0,0,8,3,9,0,0,0,0,5,0,0,0,8,0,5,0,2,6,0,1,8,0,0,7,5,0,0,0,3,5,3,7,6,0,0,0,0,0,0,0,0,0,3,8,0,0,0},
+                    {0,1,0,0,0,0,3,0,0,0,0,3,0,0,7,8,0,0,0,7,0,0,0,5,0,2,4,0,0,0,2,0,0,0,3,8,0,0,0,0,0,0,5,0,0,0,2,0,0,0,9,0,0,0,0,0,6,3,0,0,0,9,0,0,0,0,6,8,0,0,0,5,0,0,0,0,0,0,0,0,0},
+                    {0,0,0,0,9,3,0,7,0,0,0,5,0,0,6,2,0,0,0,0,9,0,4,0,0,0,0,0,0,0,9,7,0,0,0,2,0,6,0,0,0,0,5,0,0,1,4,0,0,0,0,0,9,0,0,1,0,0,3,0,4,0,0,0,0,0,0,0,0,0,0,0,0,5,3,7,0,0,0,0,0},
+                    {9,0,0,3,0,0,0,0,0,0,0,5,0,0,6,0,0,0,0,0,0,0,0,7,3,0,4,0,0,7,0,0,0,1,0,8,5,0,0,0,6,0,0,0,0,1,0,0,5,0,0,4,0,0,2,0,0,0,4,0,0,0,0,0,0,0,1,0,9,7,0,0,0,6,0,7,0,5,0,0,0},
+                    {1,8,0,0,0,0,0,0,7,2,0,0,0,8,9,0,0,0,0,6,0,0,0,0,0,5,0,8,0,0,0,0,7,0,0,0,4,0,3,0,0,0,2,0,0,0,0,0,0,0,5,6,0,0,0,0,0,0,6,4,0,0,3,0,0,0,1,0,0,5,0,0,0,0,0,2,0,0,8,0,0},
+                    {0,0,0,0,0,0,0,4,9,0,5,0,0,0,0,0,0,0,2,0,0,0,5,1,0,0,7,0,0,8,1,0,0,0,0,0,0,0,0,3,0,0,6,0,0,0,1,0,6,0,7,3,0,8,4,0,0,0,0,6,0,0,0,6,0,0,0,2,0,0,0,0,0,9,0,0,0,0,0,0,1},
+                    {9,1,0,7,2,0,0,0,0,0,0,0,0,0,3,6,4,0,0,7,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,3,0,0,8,0,7,0,0,2,0,4,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,9,5,0,8,9,0,0,0,3,0,0},
+                    {0,0,0,3,9,0,0,5,0,7,0,0,0,0,0,2,0,9,8,0,0,0,4,0,3,0,0,0,0,0,0,1,0,4,0,0,0,0,0,8,0,0,9,0,0,4,0,0,0,0,2,0,0,0,0,0,9,0,7,6,0,0,8,0,0,0,5,0,0,0,0,6,0,0,5,0,0,0,0,0,0}
+                   };
+int hard[10][81]={
+                    {9,0,3,0,0,0,0,0,6,0,0,0,0,0,2,0,0,0,0,6,0,3,7,0,0,0,9,3,0,1,6,0,0,0,0,0,0,0,0,2,0,1,0,0,0,0,0,0,0,0,0,0,3,4,0,1,8,0,2,0,7,0,0,0,0,6,8,0,0,0,9,5,0,0,0,0,0,0,0,8,0},
+                    {3,0,1,0,0,0,0,0,0,0,5,0,0,3,8,0,0,0,0,0,0,4,0,0,0,0,0,9,1,0,0,0,7,8,0,0,0,0,0,0,0,3,6,9,0,8,4,0,0,0,0,1,7,0,0,8,0,0,0,0,0,1,0,0,0,0,0,1,0,5,0,0,0,3,0,2,0,9,0,6,0},
+                    {0,0,2,5,0,0,3,0,0,0,0,0,4,0,0,7,9,0,0,0,0,0,0,0,4,5,0,3,0,0,0,4,0,0,0,1,9,0,5,0,6,0,0,0,0,0,7,1,0,0,0,0,3,0,0,0,0,3,2,8,0,0,0,8,0,0,0,0,9,0,0,0,0,0,0,0,5,0,6,0,0},
+                    {0,0,0,5,8,0,6,0,0,0,0,0,6,0,2,0,0,0,0,0,0,0,0,0,7,1,0,8,3,0,0,0,0,0,4,0,0,0,6,1,0,0,0,0,0,2,0,0,7,0,0,0,3,5,3,0,5,0,9,0,0,0,8,0,0,0,0,0,0,9,0,0,0,0,0,0,1,0,0,0,0},
+                    {0,0,0,0,8,0,3,9,0,2,0,5,0,6,4,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,0,3,0,1,7,0,0,0,0,0,0,0,0,2,0,0,0,1,0,8,0,0,0,6,0,0,4,0,0,0,3,0,0,0,0,2,3,0,0,0,5,0,0},
+                    {0,0,4,0,0,5,1,0,0,9,6,0,0,0,0,2,0,0,0,0,0,0,0,0,7,8,0,1,0,0,0,6,0,0,2,0,0,0,0,5,0,3,0,0,8,0,0,0,0,0,8,9,0,0,0,7,0,0,0,0,0,0,3,0,0,0,0,3,1,0,0,0,8,0,5,7,0,4,0,0,0},
+                    {0,4,0,0,0,0,0,0,2,1,0,0,2,8,0,9,6,0,0,0,0,0,6,0,0,0,3,0,0,0,0,0,0,0,0,0,0,7,0,1,0,0,0,4,0,2,0,0,7,0,8,0,0,9,0,0,6,0,1,0,0,5,0,0,0,0,0,0,0,0,0,8,0,5,7,0,2,0,0,0,6},
+                    {9,0,0,0,0,6,5,7,0,0,0,0,0,0,0,1,0,0,0,6,0,0,4,0,0,0,3,0,1,3,2,0,0,0,9,0,0,7,0,0,0,0,0,0,0,2,0,9,0,0,7,0,0,0,4,0,0,0,0,0,8,0,2,7,0,0,0,0,0,0,3,0,0,0,0,1,0,4,0,0,7},
+                    {0,0,0,7,5,0,0,0,9,6,0,3,8,0,0,0,0,0,0,0,5,0,9,0,0,4,0,0,0,0,0,0,0,0,0,0,4,0,1,0,0,6,8,0,0,0,0,0,1,2,0,0,6,0,8,0,4,0,0,0,1,0,0,9,0,0,0,0,7,0,0,0,0,7,0,0,0,0,5,2,0},
+                    {0,0,0,0,6,8,5,0,0,1,0,0,3,0,0,0,0,7,0,8,0,4,0,0,0,0,0,0,0,0,5,9,0,0,1,0,0,0,3,0,2,0,0,0,0,0,6,4,0,0,0,9,0,0,0,2,0,0,7,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,2,8,0,0}
+                 };
+
+ //SOLUCIONES
+ int solucioneasy[10][81]={
+                {7,3,4,8,1,5,9,2,6,5,6,1,9,2,7,8,3,4,8,9,2,3,4,6,5,7,1,3,2,5,1,7,4,6,8,9,9,7,6,2,5,8,1,4,3,4,1,8,6,9,3,2,5,7,1,5,7,4,6,2,3,9,8,2,8,9,7,3,1,4,6,5,6,4,3,5,8,9,7,1,2},
+                {3,7,4,8,9,2,6,5,1,5,2,9,6,4,1,3,8,7,1,6,8,5,3,7,9,4,2,9,5,2,3,1,6,4,7,8,4,8,1,7,2,9,5,6,3,6,3,7,4,8,5,1,2,9,7,1,6,9,5,8,2,3,4,8,9,3,2,6,4,7,1,5,2,4,5,1,7,3,8,9,6},
+                {9,1,4,5,2,6,8,3,7,6,5,3,1,8,7,9,2,4,2,7,8,3,9,4,1,5,6,5,6,1,8,7,3,2,4,9,8,9,7,4,1,2,3,6,5,3,4,2,6,5,9,7,8,1,1,3,9,2,4,5,6,7,8,7,2,5,9,6,8,4,1,3,4,8,6,7,3,1,5,9,2},
+                {6,1,4,3,7,5,9,2,8,3,9,7,4,8,2,5,1,6,5,8,2,6,9,1,3,4,7,4,5,8,2,1,7,6,3,9,9,3,1,8,4,6,2,7,5,2,7,6,9,5,3,1,8,4,7,2,3,5,6,4,8,9,1,8,4,5,1,2,9,7,6,3,1,6,9,7,3,8,4,5,2},
+                {1,8,3,9,5,6,7,2,4,6,5,7,2,1,4,3,8,9,9,2,4,7,3,8,1,5,6,4,3,8,1,6,9,5,7,2,2,6,1,3,7,5,4,9,8,7,9,5,4,8,2,6,1,3,3,7,6,8,2,1,9,4,5,5,4,2,6,9,7,8,3,1,8,1,9,5,4,3,2,6,7},
+                {3,6,2,1,7,4,8,9,5,7,8,9,5,6,3,1,2,4,1,4,5,8,9,2,6,7,3,9,3,4,7,8,5,2,1,6,8,2,7,6,4,1,3,5,9,5,1,6,2,3,9,7,4,8,4,7,8,9,1,6,5,3,2,2,9,1,3,5,8,4,6,7,6,5,3,4,2,7,9,8,1},
+                {9,1,8,2,3,4,5,6,7,7,2,4,5,6,8,9,3,1,3,5,6,9,1,7,8,2,4,8,7,9,3,4,1,6,5,2,1,4,2,6,9,5,3,7,8,5,6,3,7,8,2,1,4,9,2,9,7,8,5,6,4,1,3,4,8,5,1,7,3,2,9,6,6,3,1,4,2,9,7,8,5},
+                {6,8,2,5,9,3,7,1,4,7,9,1,2,4,6,5,3,8,4,5,3,8,7,1,9,6,2,5,2,6,9,3,8,1,4,7,3,1,7,4,6,2,8,9,5,8,4,9,7,1,5,3,2,6,9,6,5,1,2,7,4,8,3,1,3,8,6,5,4,2,7,9,2,7,4,3,8,9,6,5,1},
+                {4,9,3,1,7,5,6,8,2,5,8,6,3,2,4,9,7,1,7,1,2,6,8,9,4,3,5,8,2,7,5,6,3,1,4,9,3,4,1,7,9,2,5,6,8,9,6,5,4,1,8,7,2,3,6,5,4,8,3,1,2,9,7,1,3,9,2,4,7,8,5,6,2,7,8,9,5,6,3,1,4},
+                {4,2,8,5,7,9,6,3,1,5,9,3,1,6,8,4,2,7,6,7,1,2,3,4,5,8,9,7,4,9,3,1,2,8,5,6,3,1,5,4,8,6,7,9,2,2,8,6,7,9,5,1,4,3,8,3,2,6,4,1,9,7,5,9,6,7,8,5,3,2,1,4,1,5,4,9,2,7,3,6,8},
+        };
+int solucionmedium[10][81]={
+    {8,3,2,9,4,5,6,1,7,9,4,5,1,7,6,8,2,3,7,6,1,2,3,8,4,5,9,5,1,8,7,6,2,9,3,4,2,9,6,3,5,4,7,8,1,4,7,3,8,9,1,2,6,5,6,8,9,4,1,3,5,7,2,1,2,4,5,8,7,3,9,6,3,5,7,6,2,9,1,4,8},
+    {4,5,3,6,1,9,8,7,2,6,7,1,8,5,2,3,9,4,8,9,2,3,7,4,5,6,1,7,3,9,4,8,1,6,2,5,5,8,4,7,2,6,9,1,3,1,2,6,9,3,5,4,8,7,9,4,7,1,6,3,2,5,8,2,6,8,5,4,7,1,3,9,3,1,5,2,9,8,7,4,6},
+    {4,7,5,2,8,3,9,1,6,6,1,8,9,4,7,3,2,5,9,2,3,1,6,5,7,8,4,2,5,1,3,7,6,4,9,8,3,9,6,8,1,4,5,7,2,7,8,4,5,9,2,6,3,1,8,4,2,7,5,9,1,6,3,5,3,7,6,2,4,8,4,9,1,6,9,4,3,8,2,5,7},
+    {2,1,5,4,6,8,3,7,9,4,9,3,1,2,7,8,5,6,6,7,8,9,3,5,1,2,4,7,5,4,2,1,6,9,3,8,8,6,9,7,4,2,5,1,2,3,2,1,8,5,9,4,6,7,5,8,6,3,7,4,2,9,1,9,3,2,6,8,1,7,4,5,1,4,7,5,9,2,6,8,3},
+    {6,2,1,5,9,3,8,7,4,4,7,5,1,8,6,2,3,9,3,8,9,2,4,7,1,6,5,5,3,8,9,7,1,6,4,2,9,6,7,4,2,8,5,1,3,1,4,2,3,6,5,7,9,8,2,1,6,8,3,9,4,5,7,7,9,4,6,5,2,3,8,1,8,5,3,7,1,4,9,2,6},
+    {9,4,2,3,1,8,6,7,5,7,3,5,4,9,6,8,1,2,8,1,6,2,5,7,3,9,4,6,2,7,9,3,4,1,5,8,5,9,4,8,6,1,2,3,7,1,8,3,5,7,2,4,6,9,2,7,9,6,4,3,5,8,1,3,5,8,1,2,9,7,4,6,4,6,1,7,8,5,9,2,3},
+    {1,8,5,3,4,6,8,2,7,2,4,7,5,8,9,3,6,1,3,6,9,7,1,2,4,5,8,8,5,6,4,2,7,1,3,9,4,7,3,6,9,1,2,8,5,9,1,2,8,3,5,6,7,4,5,2,8,9,6,4,7,1,3,6,3,4,1,7,8,5,9,2,7,9,1,2,5,3,8,4,6},
+    {1,3,7,2,6,8,5,4,9,8,5,9,4,7,3,1,2,6,2,4,6,9,5,1,8,3,7,3,6,8,1,9,2,7,5,4,9,7,4,3,8,5,6,1,2,5,1,2,6,4,7,3,9,8,4,2,6,7,1,6,9,8,5,6,8,1,5,2,9,4,7,3,7,9,5,8,3,4,2,6,1},
+    {9,1,4,7,2,6,5,3,8,8,5,2,1,9,3,6,4,7,6,7,3,5,8,4,9,1,2,1,2,6,8,3,9,7,5,4,7,9,5,2,4,1,8,6,3,3,4,8,6,7,5,1,2,9,4,3,1,9,5,7,2,8,6,2,6,7,3,1,8,4,9,5,5,8,9,4,6,2,3,7,1},
+    {2,4,6,3,9,7,8,5,1,7,5,3,6,8,1,2,4,9,8,9,1,2,4,5,3,6,7,9,6,2,7,1,3,4,8,5,5,3,7,8,6,4,9,1,2,4,1,8,9,5,2,6,7,3,1,2,9,4,7,6,5,3,8,3,7,4,5,2,8,1,9,6,6,8,5,1,3,9,7,2,4}
+};
+int solucionhard[10][81]={
+    {9,7,3,1,8,4,5,2,6,8,5,4,9,6,2,3,1,7,1,6,2,3,7,5,8,4,9,3,8,1,6,4,7,9,5,2,4,9,5,2,3,1,6,7,8,6,2,7,5,9,8,1,3,4,5,1,8,4,2,9,7,6,3,7,4,6,8,1,3,2,9,5,2,3,9,7,5,6,4,8,1},
+    {3,9,1,7,2,5,4,8,6,4,5,7,6,3,8,9,2,1,2,6,8,4,9,1,3,5,7,9,1,6,5,4,7,8,3,2,5,7,2,1,8,3,6,9,4,8,4,3,9,6,2,1,7,5,6,8,5,3,7,4,2,1,9,7,2,9,8,1,6,5,4,3,1,3,4,2,5,9,7,6,8},
+    {4,9,2,5,7,6,3,1,8,5,8,6,4,3,1,7,9,2,1,3,7,8,9,2,4,5,6,3,2,8,9,4,7,5,6,1,9,4,5,1,6,3,8,2,7,6,7,1,2,8,5,9,3,4,7,6,9,3,2,8,1,4,5,8,5,4,6,1,9,2,7,3,2,1,3,7,5,4,6,8,9},
+    {7,2,3,5,8,1,6,9,4,1,4,9,6,7,2,5,8,3,5,6,8,3,4,9,7,1,2,8,3,7,9,2,5,1,4,6,4,5,6,1,3,8,2,7,9,2,9,1,7,6,4,8,3,5,3,1,5,2,9,7,4,6,8,6,7,4,8,5,3,9,2,1,9,8,2,4,1,6,3,5,7},
+    {1,7,4,2,8,5,3,9,6,2,3,5,9,6,4,8,1,7,6,8,9,1,3,7,4,2,5,3,5,2,4,7,9,6,8,1,4,6,8,3,2,1,7,5,6,7,9,1,6,5,8,2,3,4,5,1,7,8,4,2,9,6,3,8,4,6,5,9,3,1,7,2,9,2,3,7,1,6,5,4,8},
+    {7,8,4,9,2,5,1,3,6,9,6,3,1,8,7,2,4,5,5,1,2,3,4,6,7,8,9,1,5,8,4,6,9,3,2,7,2,9,7,5,1,3,4,6,8,3,4,6,2,7,8,9,5,1,4,7,1,6,5,2,8,9,3,6,2,9,8,3,1,5,7,4,8,3,5,7,9,4,6,1,2},
+    {6,4,9,3,7,1,5,8,2,1,3,5,2,8,4,9,6,7,7,8,2,5,6,9,4,1,3,5,6,3,4,9,2,8,7,1,9,7,8,1,3,6,2,4,5,2,1,4,7,5,8,6,3,9,8,2,6,9,1,7,3,5,4,3,9,1,6,4,5,7,2,8,4,5,7,8,2,3,1,9,6},
+    {9,4,2,3,1,6,5,7,8,8,3,5,7,2,9,1,4,6,1,6,7,8,4,5,9,2,3,5,1,3,2,6,8,7,9,4,6,7,4,9,3,1,2,8,5,2,8,9,4,5,7,3,6,1,4,9,6,5,7,3,8,1,2,7,5,1,6,8,2,4,3,9,3,2,8,1,9,4,6,5,7},
+    {2,4,8,7,5,1,6,3,9,6,9,3,8,4,2,7,5,1,7,1,5,6,9,3,2,4,8,3,6,9,5,7,8,4,1,2,4,2,1,9,3,6,8,7,5,5,8,7,1,2,4,9,6,3,8,3,4,2,6,5,1,9,7,9,5,2,4,1,7,3,8,6,1,7,6,3,8,9,5,2,4},
+    {7,3,9,2,6,8,5,4,1,1,4,6,3,5,9,2,8,7,2,8,5,4,1,7,3,6,9,8,7,2,5,9,3,4,1,6,9,1,3,6,2,4,7,5,8,5,6,4,7,8,1,9,2,3,3,2,1,8,7,5,6,9,4,4,5,8,9,3,6,1,7,2,6,9,7,1,4,2,8,3,5}
+};
+
+//CARGA LOS TABLEROS DEL SUDOKU, Y SUS SOLUCIONES, EN ARREGLOS NUEVOS SEGUN LA DIFICULTAD
+void generartablero (int filaran, int dif, int tablero[][9], char tablejug[][9], int solucion[][9]){
+
+//VARIABLES
+ int a;
+        a=0;
+switch(dif){
+    case 1:
+        for(int i=0;i<9;i++){
+           for(int j=0;j<9;j++){
+                tablero[i][j]=easy[filaran][a];
+                solucion[i][j]=solucioneasy[filaran][a];
+                if(easy[filaran][a]==0){
+                    tablejug[i][j]='-';
+                }
+                else{
+                    tablejug[i][j]=easy[filaran][a]+'0';
+                }
+                a++;
+           }
+        }
+        break;
+
+    case 2:
+        for(int i=0;i<9;i++){
+           for(int j=0;j<9;j++){
+                tablero[i][j]=medium[filaran][a];
+                solucion[i][j]=solucionmedium[filaran][a];
+                if(medium[filaran][a]==0){
+                    tablejug[i][j]='-';
+                }
+                else{
+                    tablejug[i][j]=medium[filaran][a]+'0';
+                }
+                a++;
+           }
+        }
+        break;
+    case 3:
+         for(int i=0;i<9;i++){
+           for(int j=0;j<9;j++){
+                tablero[i][j]=hard[filaran][a];
+                solucion[i][j]=solucionhard[filaran][a];
+                if(medium[filaran][a]==0){
+                    tablejug[i][j]='-';
+                }
+                else{
+                    tablejug[i][j]=hard[filaran][a]+'0';
+                }
+                a++;
+           }
+        }
+}
+}
+
+//PRESENTA LOS TABLEROS EN PANTALLA
+void tableparajugar(int tablero[][9]){
+
+    printf("   1 2 3   4 5 6   7 8 9\n");
+    printf("  ----------------------\n");
+    for(int i=0;i<3;i++){
+        printf("%d |", i+1);
+        for(int j=0;j<3;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("| ");
+        for(int j=3;j<6;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("| ");
+        for(int j=6;j<9;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("\n");
+    }
+    printf("  -------+-------+------\n");
+    for(int i=3;i<6;i++){
+        printf("%d |", i+1);
+        for(int j=0;j<3;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("| ");
+        for(int j=3;j<6;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("| ");
+        for(int j=6;j<9;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("\n");
+    }
+    printf("  -------+-------+------\n");
+    for(int i=6;i<9;i++){
+        printf("%d |", i+1);
+        for(int j=0;j<3;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("| ");
+        for(int j=3;j<6;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("| ");
+        for(int j=6;j<9;j++){
+            printf("%d ",tablero[i][j]);
+        }
+        printf("\n");
+    }
+    printf("  ----------------------\n");
+
+}
+
+//DA UNA AYUDA AL USUARIO SEGUN LA DIFICULTAD SELECCIONADA PREVIAMENTE
+void ayudin(int dif, int tablero[][9], char tablejug[][9],int solucion[][9]){
+
+switch(dif){
+    case 1:
+        srand(time(0));
+        int ayu=0;
+        fila=rand()%9;
+        colum=rand()%9;
+        //CORROBORA QUE SEA UNA CASILLA MODIFICABLE
+        do{
+           if(tablejug[fila][colum]=='-'){
+            if(tablero[fila][colum]==0){
+                tablero[fila][colum]=solucioneasy[fila][colum];
+                tablejug[fila][colum]=solucioneasy[fila][colum]+'0';
+                ayu=ayu+1;
+            }else {
+            ayu=ayu+0;
+            }
+           }else {
+           ayu=ayu+0;
+           }
+           }while(ayu==0);
+           printf("Su solucion se encuentra en: fila %d  columna %d y es: %d\n", fila+1, colum+1, solucion[fila][colum]);
+
+           break;
+
+    case 2:
+             srand(time(0));
+        int ayum=0;
+        fila=rand()%9;
+        colum=rand()%9;
+
+        do{
+           if(tablejug[fila][colum]=='-'){
+            if(tablero[fila][colum]==0){
+                tablero[fila][colum]=solucionmedium[fila][colum];
+                tablejug[fila][colum]=solucionmedium[fila][colum]+'0';
+                ayum=ayum+1;
+            }else {
+            ayum=ayum+0;
+            }
+           }else {
+           ayum=ayum+0;
+           }
+           }while(ayum==0);
+           printf("Su solucion se encuentra en: fila %d  columna %d y es: %d\n", fila+1, colum+1, solucion[fila][colum]);
+
+           break;
+    case 3:
+         srand(time(0));
+        int ayuh=0;
+        fila=rand()%9;
+        colum=rand()%9;
+
+        do{
+           if(tablejug[fila][colum]=='-'){
+            if(tablero[fila][colum]==0){
+                tablero[fila][colum]=solucionhard[fila][colum];
+                tablejug[fila][colum]=solucionhard[fila][colum]+'0';
+                ayuh=ayuh+1;
+            }else {
+            ayuh=ayuh+0;
+            }
+           }else {
+           ayuh=ayuh+0;
+           }
+           }while(ayuh==0);
+           printf("Su solucion se encuentra en: fila %d  columna %d y es: %d\n", fila+1, colum+1, solucion[fila][colum]);
+
+           break;
+}
+}
+
+//BORRA UN NUMERO INGRESADO POR EL USUARIO PIDIENDOLE PREVIAMENTE
+//EL NUMERO DE FILA Y COLUMNA
+int borrarnum(int tablero[][9], char tablejug[][9]){
+int fila, colum;
+
+printf("Ingrese numero de fila");
+scanf("%d", &fila);
+//VALIDA RANGO DE LA FILA INGRESADA
+if(fila<0 || fila>10){
+    printf("Fila inexistente. Ingrese un valor entre 1 y 9");
+    scanf("%d", &fila);
+}
+printf("Ingrese numero de columna");
+scanf("%d", &colum);
+//VALIDA RANGO DE LA COLUMNA INGRESADA
+if(colum<0 || colum>10){
+    printf("Columna inexistente. Ingrese un valor entre 1 y 9");
+    scanf("%d", &colum);
+}
+//SI LA POSICION ES CORRECTA
+//CAMBIA LA POSICION ELEGIDA POR EL USUARIO
+
+if(tablejug[fila-1][colum-1]== '-') {
+    tablero[fila-1][colum-1]=0;
+    return 1;
+}
+else {
+    printf("No se puede modificar la posicion elegida");
+}
+
+return 0;
+}
+
+//PIDE AL USUARIO UN NUMERO PARA INGRESAR
+//SI EL NUMERO ESTA ENTRE EL RANGO PERMITIDO LE PIDE FILA Y COLUMNA
+//VALIDA QUE NO SE REPITA EN COLUMNA, FILA Y CUADRADO 3X3
+int completa(int tablero[][9], char table[][9]){
+    int num, fila, col, conti, contidos=1;
+    do{
+        printf("Que numero quiere ingresar?(entre 1 y 9)\n");
+        scanf("%d", &num);
+        //VALIDA RANGO DE NUMERO INGRESADO
+        if(num>0 && num<10){
+            do{
+                printf("Ingrese fila\n");
+                scanf("%d", &fila);
+                //VALIDA RANGO DE FILA INGRESADA
+                if(fila>0 && fila<10){
+                    do{
+                        printf("Ingrese columna\n");
+                        scanf("%d", &col);
+                        //VALIDA RANGO DE COLUMNA INGRESADA
+                        if(col>0 && col<10){
+                            if(table[fila-1][col-1]=='-'){
+                                //VALIDA QUE NO SE REPITA EN FILA
+                                for(int i=0; i<9; i++){
+                                    if(tablero[i][col-1]==num){
+                                        contidos=0;
+                                    }
+                                }
+                                if(contidos==1){
+                                    //VALIDA QUE NO SE REPITA EN COLUMNA
+                                    for(int i=0; i<9; i++){
+                                        if(tablero[fila-1][i]==num){
+                                            contidos=0;
+                                        }
+                                    }
+                                    if(contidos==1){
+                                          //VALIDA QUE NO SE REPITA EN CUADRADO 3X3
+                                          if(fila>0 && fila<4){
+                                            if(col>0 && col<4){
+                                                for(int i=0;i<3;i++){
+                                                    for(int j=0;j<3;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }else if(col>3 && col<7){
+                                                for(int i=0;i<3;i++){
+                                                    for(int j=3;j<6;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }else if(col>6 && col<10){
+                                                for(int i=0;i<3;i++){
+                                                    for(int j=6;j<9;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if(fila>3 && fila<7){
+                                            if(col>0 && col<4){
+                                                for(int i=3;i<6;i++){
+                                                    for(int j=0;j<3;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }else if(col>3 && col<7){
+                                                for(int i=3;i<6;i++){
+                                                    for(int j=3;j<6;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }else if(col>6 && col<10){
+                                                for(int i=3;i<6;i++){
+                                                    for(int j=6;j<9;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if(fila>6 && fila<10){
+                                            if(col>0 && col<4){
+                                                for(int i=6;i<9;i++){
+                                                    for(int j=0;j<3;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }else if(col>3 && col<7){
+                                                for(int i=6;i<9;i++){
+                                                    for(int j=3;j<6;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }else if(col>6 && col<10){
+                                                for(int i=6;i<9;i++){
+                                                    for(int j=6;j<9;j++){
+                                                        if(tablero[i][j]==num){
+                                                            contidos=0;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }else{
+                                        printf("Numero repetido en columna\n");
+                                    }
+                                }
+                                else{
+                                    printf("Numero repetido en fila\n");
+                                }
+                            }
+                            else{
+                                printf("Valor predeterminado\n");
+                            }
+                            if(contidos==1){
+                                tablero[fila-1][col-1]=num;
+                                return 1;
+                            }else if(contidos==0){
+                                printf("Numero repetido en cuadrado 3x3\n");
+                            }
+                            conti=1;
+                        }else{
+                            printf("Numero de columna fuera de rango\n");
+                            conti=0;
+                        }
+                    }while(conti==0);
+                    conti=1;
+                }else{
+                    printf("Numero de fila fuera de rango\n");
+                    conti=0;
+                }
+            }while(conti==0);
+            conti=1;
+        }else{
+            printf("Numero fuera de rango\n");
+            conti=0;
+        }
+    }while(conti==0);
+    return 0;
+}
+
+//COMPRUEBA QUE SE HAYAN COMPLETADO LOS 81 CASILLEROS DEL TABLERO
+int findejuego(int tablero[][9]){
+    int fintablero=0;
+    for(int i=0;i<9;i++){
+        for(int j=0;j<9;j++){
+            if(tablero[i][j]!=0){
+                fintablero++;
+            }else{
+                return 0;
+            }
+        }
+    }
+    if(fintablero==81){
+        return 1;
+    }
+    return 0;
+}
+
+void MENUP (int x){
+    printf("Bienvenido al juego\n");
+    printf("**************************************\n");
+    printf("Digite 1 para jugar\n");
+    printf("Digite 2 para recibir instrucciones\n");
+    printf("Digite 3 para salir\n");
+    printf("**************************************\n");
+    scanf("%d", &opc);
+}
+void MENUS (int x){
+    printf("**************************************\n");
+    printf("Digite 1 para jugar\n");
+    printf("Digite 2 para recibir instrucciones\n");
+    printf("Digite 3 para salir\n");
+    printf("**************************************\n");
+    scanf("%d", &opc);
+
+}
+void SUBMENU (int x){
+    printf("Digite 1 para dificultad easy\n");
+    printf("Digite 2 para dificultad medium\n");
+    printf("Digite 3 para dificultad hard\n");
+    scanf("%d", &dif);
+}
+
+int main()
+{
+    int tablero[9][9];
+    char tablejug[9][9];
+    int solucion[9][9];
+    int orden[10]={0,1,2,3,4,5,6,7,8,9};
+    int aux;
+    srand(time(0));
+    int contayudaeasy=0;
+    int contayudamedium=0;
+    int contayudahard=0;
+
+    MENUP(NUM);
+      for(int i=10;i>0;i--){
+        aux=rand()%i;
+
+    while(opc != 1 && opc != 2 && opc != 3){
+        printf("Opcion incorrecta, digite una opcion valida\n");
+        printf("**************************************\n");
+        printf("Digite 1 para jugar\n");
+        printf("Digite 2 para recibir instrucciones\n");
+        printf("Digite 3 para salir\n");
+        printf("**************************************\n");
+        scanf("%d", &opc);
+    }
+
+    if(opc==3){
+         printf("\nUsted decidio salir\n");
+         return 0;
+    }
+
+    if (opc==2){
+
+        printf("+++++++ Intrucciones del juego +++++++\n ");
+        printf("\nEl sudoku se presenta normalmente como un cuadrado de 9 x 9, compuesto por subcuadrados de 3 x 3 denominados regiones, tambien se le llaman cajas o bloques \n" );
+        printf("Algunas celdas ya contienen numeros, conocidos como numeros dados o a veces pistas.\n");
+        printf("\n+++++++ Objetivo +++++++\n\nEl objetivo es rellenar las celdas vacias, con un numero en cada una de ellas, de tal forma que cada columna, fila y region contenga los numeros 1 al 9.\n");
+        printf("Ademas, cada numero ingresado debe aparecer solo una vez en cada una de las tres direcciones /Fila, Columna, Cuadrado 3x3/.\n");
+        printf("\n+++++++ AHORA VAMOS A JUGAR!!! +++++++\n");
+    }
+    while(opc=1){
+        switch(opc){
+            case 1:
+
+                    printf("\n Ingrese dificultad\n");
+                    SUBMENU(NUM);
+                    //VALIDA OPCION CORRECTA
+                    while(dif >= 4 || dif < 1){
+                        printf("Ingrese una opcion correcta\n");
+                        SUBMENU(NUM);
+                    }
+
+                    generartablero(orden[aux],dif,tablero,tablejug,solucion);
+                    tableparajugar(tablero);
+                     int cuenta=0;
+                     int continuajuego=0;
+                     while(continuajuego==0){
+                              if(cuenta==1){
+                        tableparajugar(tablero);
+                    }
+
+                    if(dif == 1){
+                            int opcion;
+                            int maximoayuda=3;
+                        printf("\nAyudas empleadas: %d/3\n",contayudaeasy);
+                         printf("1-Para ayuda\n2-Para borrar\n3-Para agregar numero \n ");
+                         scanf("%d", &opcion);
+                         switch(opcion){
+                     case 1:
+                         if(maximoayuda != contayudaeasy){
+                        ayudin(dif,tablero,tablejug,solucion);
+                            contayudaeasy=contayudaeasy+1;
+                            cuenta=1;
+                           } else {
+                           printf("No tiene mas ayudas\n");
+                          }
+                          break;
+
+                     case 2:
+                         cuenta=borrarnum(tablero,tablejug);
+                         break;
+
+                     case 3:
+                        cuenta=completa(tablero,tablejug);
+                        break;
+
+                     default:
+                        printf("Opcion no valida\n");
+                        break;
+}
+                      continuajuego=findejuego(tablero);
+                      if(continuajuego==1){
+                        printf("Fin del juego");
+                      }
+}
+                            if(dif == 2){
+                            int opcion;
+                            int maximoayuda=4;
+                        printf("\nAyudas empleadas: %d/4\n",contayudamedium);
+                         printf("1-Para ayuda\n2-Para borrar\n3-Para agregar numero \n ");
+                         scanf("%d", &opcion);
+                         switch(opcion){
+
+                     case 1:
+                         if(maximoayuda != contayudamedium){
+                        ayudin(dif,tablero,tablejug,solucion);
+                            contayudamedium=contayudamedium+1;
+                            cuenta=1;
+                           } else {
+                           printf("No tiene mas ayudas\n");
+                          }
+                          break;
+
+                     case 2:
+                         cuenta=borrarnum(tablero,tablejug);
+                         break;
+
+                     case 3:
+                        cuenta=completa(tablero,tablejug);
+                        break;
+
+                     default:
+                        printf("Opcion no valida\n");
+                        break;
+}
+                      continuajuego=findejuego(tablero);
+                      if(continuajuego==1){
+                        printf("Fin del juego");
+                      }
+}
+                            if(dif == 3){
+                            int opcion;
+                            int maximoayuda=5;
+                        printf("\nAyudas empleadas: %d/5\n",contayudahard);
+                         printf("1-Para ayuda\n2-Para borrar\n3-Para agregar numero\n   ");
+                         scanf("%d", &opcion);
+                         switch(opcion){
+
+                     case 1:
+                         if(maximoayuda != contayudahard){
+                        ayudin(dif,tablero,tablejug,solucion);
+                            contayudahard=contayudahard+1;
+                            cuenta=1;
+                           } else {
+                           printf("No tiene mas ayudas\n");
+                          }
+                          break;
+
+                     case 2:
+                         cuenta=borrarnum(tablero,tablejug);
+                         break;
+
+                     case 3:
+                        cuenta=completa(tablero,tablejug);
+                        break;
+
+                     default:
+                        printf("Opcion no valida\n");
+                        break;
+}
+                      continuajuego=findejuego(tablero);
+                      if(continuajuego==1){
+                        printf("Fin del juego");
+                      }
+}
+                    }
+                    }
+            break;
+       }
+       }
+    return 0;
+}
+
+// Para una futura actualizacion del programa podria agregarse:
+//Contador de movimientos realizados durante el juego
+//Temporizador para cada partida
+//Tabla de clasificaciones
+
